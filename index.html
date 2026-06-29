@@ -3,41 +3,114 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Julia Lew</title>
+  <title>Prosta strona - obrazy jako linki</title>
   <style>
     body {
       margin: 0;
-      background: #fff; /* białe tło */
+      background: #fff;
       font-family: system-ui, Arial, sans-serif;
     }
+
+    /* .wrap pionowo i poziomo wyśrodkowane; większy odstęp między elementami */
     .wrap {
       min-height: 100vh;
       display: flex;
-      flex-direction: column; /* obrazki jeden pod drugim */
+      flex-direction: column;
       align-items: center;    /* wyśrodkowanie poziome */
-      justify-content: flex-center;
-      padding: 40px 20px;
-      gap: 16px;
+      justify-content: center;/* WYŚRODKOWANIE PIONOWE */
+      padding: 40px 20px;     /* bezpieczne odstępy przy małych ekranach */
+      gap: 28px;              /* większe odstępy między elementami */
+      box-sizing: border-box;
     }
-    img {
-      max-width: 90%;
-      height: auto;
+
+    /* Link-wrappers dla obrazków */
+    a.img-wrap,
+    a.single-link {
       display: block;
+      width: 320px;        /* dopasuj szerokość */
+      max-width: 90%;
+      text-decoration: none;
+      color: inherit;
+      position: relative;  /* potrzebne dla absolutnego hover obrazka */
+      overflow: hidden;
+      border-radius: 4px;
     }
+
+    /* Pojedyncze img (pierwszy) */
+    .single-link img,
+    .img-wrap img,
+    .single-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* Nakładany obraz (wersja "hover") - domyślnie niewidoczny */
+    a.img-wrap img.hover {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity .18s ease-in-out;
+      pointer-events: none; /* hover idzie do linka */
+    }
+
+    /* Pokazujemy wersję hover przy najechaniu lub przy fokusie (klawiatura) */
+    a.img-wrap:hover img.hover,
+    a.img-wrap:focus img.hover,
+    a.img-wrap:focus-within img.hover {
+      opacity: 1;
+    }
+
+    /* Widoczny fokus dla dostępności */
+    a.img-wrap:focus,
+    a.single-link:focus {
+      box-shadow: 0 0 0 4px rgba(21,156,228,0.25);
+      outline: none;
+      border-radius: 6px;
+    }
+
     p {
-      margin-top: 24px;
+      margin: 0;
       text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <img src="image1.jpg" alt="Obraz 1">
-    <img src="image2.jpg" alt="Obraz 2">
-    <img src="image3.jpg" alt="Obraz 3">
-    <img src="image4.jpg" alt="Obraz 4">
-    <img src="image5.jpg" alt="Obraz 5">
-    <p>Copyright Julia Lew</p>
+    <!-- 1) Pierwszy obrazek: statyczny, link do strony głównej -->
+    <a class="single-link" href="/" aria-label="Strona główna">
+      <img class="single-img" src="image1.jpg" alt="Obraz 1 - statyczny">
+    </a>
+
+    <!-- 2) Obrazek: zmienia się na inny przy hover, link do podstrony -->
+    <a class="img-wrap" href="subpage2.html" aria-label="Przejdź do podstrony 2">
+      <img class="normal" src="image2.jpg" alt="Obraz 2 - normalny">
+      <img class="hover" src="image2-hover.jpg" alt="Obraz 2 - wersja po najechaniu">
+    </a>
+
+    <!-- 3) Obrazek: zmienia się na inny przy hover, link do podstrony -->
+    <a class="img-wrap" href="subpage3.html" aria-label="Przejdź do podstrony 3">
+      <img class="normal" src="image3.jpg" alt="Obraz 3 - normalny">
+      <img class="hover" src="image3-hover.jpg" alt="Obraz 3 - wersja po najechaniu">
+    </a>
+
+    <!-- 4) Obrazek: zmienia się na inny przy hover, link do podstrony -->
+    <a class="img-wrap" href="subpage4.html" aria-label="Przejdź do podstrony 4">
+      <img class="normal" src="image4.jpg" alt="Obraz 4 - normalny">
+      <img class="hover" src="image4-hover.jpg" alt="Obraz 4 - wersja po najechaniu">
+    </a>
+
+    <!-- 5) Ostatni: animowany GIF (normalny), przy najechaniu zmienia się na statyczny obraz, link do strony głównej -->
+    <a class="img-wrap" href="/" aria-label="Strona główna">
+      <img class="normal" src="anim.gif" alt="Ostatni obraz - animowany GIF">
+      <img class="hover" src="anim-static.jpg" alt="Ostatni obraz - statyczna wersja po najechaniu">
+    </a>
+
+    <p>To jest końcowy napis.</p>
   </div>
 </body>
 </html>

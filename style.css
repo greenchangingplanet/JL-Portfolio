@@ -1,7 +1,19 @@
+/* GŁÓWNY PLIK STYLU DLA STRONY */
 body {
   margin: 0;
   background: #fff;
   font-family: system-ui, Arial, sans-serif;
+}
+
+:root {
+  --img-base-width: 320px;
+}
+
+/* domyślna szerokość kontenerów obrazków */
+.item,
+.single-link.img-wrap {
+  width: var(--img-base-width);
+  max-width: 90%;
 }
 
 .wrap {
@@ -16,10 +28,11 @@ body {
   text-align: center;
 }
 
+/* bazowe ustawienia dla anchorów - używają zmiennej zamiast stałej */
 a.img-wrap,
 a.single-link {
   display: block;
-  width: 320px;
+  width: var(--img-base-width);
   max-width: 90%;
   text-decoration: none;
   color: inherit;
@@ -28,6 +41,7 @@ a.single-link {
   border-radius: 4px;
 }
 
+/* obrazy: normal i hover */
 .single-link img,
 .img-wrap img,
 .single-img {
@@ -37,6 +51,7 @@ a.single-link {
   object-fit: cover;
 }
 
+/* hover image (nakłada się absolutnie) */
 a.img-wrap img.hover {
   position: absolute;
   inset: 0;
@@ -48,12 +63,27 @@ a.img-wrap img.hover {
   pointer-events: none;
 }
 
+/* pokaz hover image przy hover/focus na anchorze */
 a.img-wrap:hover img.hover,
 a.img-wrap:focus img.hover,
 a.img-wrap:focus-within img.hover {
   opacity: 1;
 }
 
+/* jeśli używasz .item jako kontenera - przełączanie obrazów opierające się na hover/focus kontenera */
+.item:hover .img-wrap img.hover,
+.item:focus .img-wrap img.hover,
+.item:focus-within .img-wrap img.hover {
+  opacity: 1;
+}
+
+.item:hover .img-wrap img.normal,
+.item:focus .img-wrap img.normal,
+.item:focus-within .img-wrap img.normal {
+  opacity: 0;
+}
+
+/* fokus dla dostępności */
 a.img-wrap:focus,
 a.single-link:focus {
   box-shadow: 0 0 0 4px rgba(21,156,228,0.25);
@@ -61,7 +91,45 @@ a.single-link:focus {
   border-radius: 6px;
 }
 
+/* potwierdzenie skopiowania (używane wewnątrz elementów kopiujących) */
+.copied-msg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease-in-out;
+  z-index: 10;
+  white-space: nowrap;
+}
+.copied-msg.show { opacity: 1; }
+
+/* klasy pomocnicze (użyj w HTML) */
+/* pierwszy obrazek 6x mniejszy */
+.single-link.tiny {
+  width: calc(var(--img-base-width) / 6);
+}
+
+/* trzeci obrazek powiększony o 25% */
+.item.scale-125 {
+  width: calc(var(--img-base-width) * 1.25);
+}
+
+/* drobne resety/tekst */
 p {
   margin: 0;
   text-align: center;
+}
+
+/* Opcjonalne: responsywne zmniejszenie bazowej szerokości na małych ekranach */
+@media (max-width: 480px) {
+  :root { --img-base-width: 260px; }
+  .single-link.tiny { width: calc(var(--img-base-width) / 6); }
+  .item.scale-125 { width: calc(var(--img-base-width) * 1.25); }
 }

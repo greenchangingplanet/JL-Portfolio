@@ -1,19 +1,12 @@
 /* GŁÓWNY PLIK STYLU DLA STRONY */
-body {
-  margin: 0;
-  background: #fff;
-  font-family: system-ui, Arial, sans-serif;
-}
-
 :root {
   --img-base-width: 320px;
 }
 
-/* domyślna szerokość kontenerów obrazków */
-.item,
-.single-link.img-wrap {
-  width: var(--img-base-width);
-  max-width: 90%;
+body {
+  margin: 0;
+  background: #fff;
+  font-family: system-ui, Arial, sans-serif;
 }
 
 .wrap {
@@ -28,49 +21,72 @@ body {
   text-align: center;
 }
 
-/* bazowe ustawienia dla anchorów - używają zmiennej zamiast stałej */
-a.img-wrap,
-a.single-link {
-  display: block;
+/* kontener elementu (pozwala kontrolować, kiedy link jest interaktywny) */
+.item {
+  position: relative;
   width: var(--img-base-width);
   max-width: 90%;
+  display: block;
+  outline: none;
+}
+
+/* domyślnie linki wewnątrz .item nie reagują na klik (stan "nie-link") */
+.item > a.img-wrap {
+  pointer-events: none;
+}
+/* po hover/focus na kontenerze aktywujemy link (staje się klikalny) */
+.item:hover > a.img-wrap,
+.item:focus > a.img-wrap,
+.item:focus-within > a.img-wrap {
+  pointer-events: auto;
+}
+
+/* Link-wrappers / button wrappers dla obrazków */
+a.img-wrap,
+button.img-wrap {
+  display: block;
+  width: 100%;
   text-decoration: none;
   color: inherit;
   position: relative;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 /* obrazy: normal i hover */
-.single-link img,
-.img-wrap img,
-.single-img {
+.img-wrap img.normal {
   display: block;
   width: 100%;
   height: auto;
   object-fit: cover;
+  transition: opacity .25s ease-in-out;
+  opacity: 1;
+  z-index: 1;
 }
 
-/* hover image (nakłada się absolutnie) */
-a.img-wrap img.hover {
+.img-wrap img.hover {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* domyślnie cover */
   opacity: 0;
-  transition: opacity .18s ease-in-out;
+  transition: opacity .25s ease-in-out;
   pointer-events: none;
+  z-index: 2;
 }
 
-/* pokaz hover image przy hover/focus na anchorze */
-a.img-wrap:hover img.hover,
-a.img-wrap:focus img.hover,
-a.img-wrap:focus-within img.hover {
-  opacity: 1;
+/* specjalna klasa gdy hover-image ma być contain (np. element 5) */
+.img-wrap img.hover.no-cover {
+  object-fit: contain;
+  background: #fff;
 }
 
-/* jeśli używasz .item jako kontenera - przełączanie obrazów opierające się na hover/focus kontenera */
+/* Przy hover/focus kontenera: hover pojawia się, normal zanika */
 .item:hover .img-wrap img.hover,
 .item:focus .img-wrap img.hover,
 .item:focus-within .img-wrap img.hover {
@@ -83,15 +99,23 @@ a.img-wrap:focus-within img.hover {
   opacity: 0;
 }
 
-/* fokus dla dostępności */
-a.img-wrap:focus,
-a.single-link:focus {
-  box-shadow: 0 0 0 4px rgba(21,156,228,0.25);
-  outline: none;
-  border-radius: 6px;
+/* Pierwszy obrazek (bez .item) - klikalny od razu */
+.single-link.img-wrap {
+  pointer-events: auto;
 }
 
-/* potwierdzenie skopiowania (używane wewnątrz elementów kopiujących) */
+/* Fokus dla dostępności */
+.item:focus {
+  box-shadow: 0 0 0 4px rgba(21,156,228,0.12);
+  border-radius: 6px;
+}
+a.img-wrap:focus,
+button.img-wrap:focus {
+  box-shadow: 0 0 0 4px rgba(21,156,228,0.25);
+  outline: none;
+}
+
+/* potwierdzenie skopiowania */
 .copied-msg {
   position: absolute;
   left: 50%;
@@ -110,7 +134,15 @@ a.single-link:focus {
 }
 .copied-msg.show { opacity: 1; }
 
-/* klasy pomocnicze (użyj w HTML) */
+/* statyczny napis (element 6) */
+.static-text {
+  width: var(--img-base-width);
+  max-width: 90%;
+  color: #111;
+  font-size: 18px;
+}
+
+/* pomocnicze klasy (użyj w HTML) */
 /* pierwszy obrazek 6x mniejszy */
 .single-link.tiny {
   width: calc(var(--img-base-width) / 6);
@@ -127,7 +159,7 @@ p {
   text-align: center;
 }
 
-/* Opcjonalne: responsywne zmniejszenie bazowej szerokości na małych ekranach */
+/* responsywność: mniejsze bazowe rozmiary na VERY small ekranach */
 @media (max-width: 480px) {
   :root { --img-base-width: 260px; }
   .single-link.tiny { width: calc(var(--img-base-width) / 6); }

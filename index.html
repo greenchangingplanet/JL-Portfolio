@@ -173,13 +173,13 @@
     </div>
 
     <!-- 5) Obrazek: animowany GIF; kliknięcie kopiuje email -->
-    <div class="item" tabindex="0" aria-label="Element 5 - kliknij aby skopiować email">
-      <button class="img-wrap copy-btn" type="button" data-email="kontakt@example.com" aria-label="Kliknij, aby skopiować adres email">
-        <img class="normal" src="images/menu/zlecenia_image.gif" alt="Obraz 5 - animowany GIF">
-        <!-- jeśli chcesz wersję hover dla GIF, możesz dodać <img class="hover" src="..."> tutaj -->
-        <span class="copied-msg" aria-hidden="true">Skopiowano</span>
-      </button>
-    </div>
+    <div class="item" tabindex="0" aria-label="Element 5 - najedź, aby aktywować; klik skopiuje email">
+  <a class="img-wrap" href="#" data-email="kontakt@example.com" aria-label="Kliknij, aby skopiować adres email">
+    <img class="normal" src="images/menu/zlecenia_image.gif" alt="Obraz 5 - animowany GIF">
+    <img class="hover" src="images/menu/Contact_image.png alt="Obraz 5 - wersja po najechaniu - kliknij aby skopiować email">
+    <span class="copied-msg" aria-hidden="true">Skopiowano</span>
+  </a>
+</div>
 
     <!-- 6) Statyczny napis (element 6) -->
     <div class="static-text" role="status" aria-label="Końcowy napis">

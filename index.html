@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="pl">
 <head>
@@ -24,12 +23,31 @@
       text-align: center;
     }
 
+    /* kontener elementu (pozwala kontrolować, kiedy link jest interaktywny) */
+    .item {
+      position: relative;
+      width: 320px;
+      max-width: 90%;
+      display: block;
+      outline: none; /* focus styling poniżej */
+    }
+
+    /* domyślnie linki wewnątrz .item nie reagują na klik (stan "nie-link") */
+    .item > a.img-wrap {
+      pointer-events: none;
+    }
+    /* po hover/focus na kontenerze aktywujemy link (staje się klikalny) */
+    .item:hover > a.img-wrap,
+    .item:focus > a.img-wrap,
+    .item:focus-within > a.img-wrap {
+      pointer-events: auto;
+    }
+
     /* Link-wrappers / button wrappers dla obrazków */
     a.img-wrap,
     button.img-wrap {
       display: block;
-      width: 320px;
-      max-width: 90%;
+      width: 100%;
       text-decoration: none;
       color: inherit;
       position: relative;  /* potrzebne dla absolutnego hover obrazka */
@@ -41,7 +59,7 @@
       cursor: pointer;
     }
 
-    /* Podstawowy obraz (normal) - bierze udział w układzie i będzie zanikać */
+    /* Obrazy normal/hover */
     .img-wrap img.normal {
       display: block;
       width: 100%;
@@ -52,7 +70,6 @@
       z-index: 1;
     }
 
-    /* Obraz hover — absolutny, nakłada się na podstawowy obraz */
     .img-wrap img.hover {
       position: absolute;
       inset: 0;
@@ -65,32 +82,36 @@
       z-index: 2;
     }
 
-    /* Przy hover lub focus wymieniamy obrazki: hover pojawia się, normal zanika */
-    .img-wrap:hover img.hover,
-    .img-wrap:focus img.hover,
-    .img-wrap:focus-within img.hover {
+    /* Przy hover/focus kontenera: hover pojawia się, normal zanika */
+    .item:hover .img-wrap img.hover,
+    .item:focus .img-wrap img.hover,
+    .item:focus-within .img-wrap img.hover {
       opacity: 1;
     }
 
-    .img-wrap:hover img.normal,
-    .img-wrap:focus img.normal,
-    .img-wrap:focus-within img.normal {
+    .item:hover .img-wrap img.normal,
+    .item:focus .img-wrap img.normal,
+    .item:focus-within .img-wrap img.normal {
       opacity: 0;
     }
 
+    /* Pierwszy obrazek (bez .item) - klikalny od razu */
+    .single-link.img-wrap {
+      pointer-events: auto;
+    }
+
     /* Widoczny fokus dla dostępności */
+    .item:focus {
+      box-shadow: 0 0 0 4px rgba(21,156,228,0.12);
+      border-radius: 6px;
+    }
     a.img-wrap:focus,
     button.img-wrap:focus {
       box-shadow: 0 0 0 4px rgba(21,156,228,0.25);
       outline: none;
     }
 
-    p {
-      margin: 0;
-      text-align: center;
-    }
-
-    /* wiadomość potwierdzająca skopiowanie (wewnątrz przycisku) */
+    /* Potwierdzenie skopiowania */
     .copied-msg {
       position: absolute;
       left: 50%;
@@ -108,6 +129,16 @@
       white-space: nowrap;
     }
     .copied-msg.show { opacity: 1; }
+
+    /* statyczny napis (element 6) */
+    .static-text {
+      width: 320px;
+      max-width: 90%;
+      color: #111;
+      font-size: 18px;
+    }
+
+    p { margin: 0; }
   </style>
 </head>
 <body>
@@ -117,38 +148,43 @@
       <img class="normal single-img" src="images/image1.jpg" alt="Obraz 1 - statyczny">
     </a>
 
-    <!-- 2) Obrazek: zmienia się na inny przy hover i jest linkiem -->
-    <a class="img-wrap" href="subpage2.html" aria-label="Przejdź do podstrony 2">
-      <img class="normal" src="images/menu/o_mnie_image.png" alt="Obraz 2 - normalny">
-      <img class="hover" src="images/menu/O_mnie_hover.png" alt="Obraz 2 - wersja po najechaniu">
-    </a>
+    <!-- 2) Obrazek: hover zmienia obraz na inny, a wtedy link staje się aktywny (href zachowany) -->
+    <div class="item" tabindex="0" aria-label="Element 2 - najedź, aby aktywować link">
+      <a class="img-wrap" href="subpage2.html" aria-label="Przejdź do podstrony 2">
+        <img class="normal" src="images/menu/o_mnie_image.png" alt="Obraz 2 - normalny">
+        <img class="hover" src="images/menu/O_mnie_hover.png" alt="Obraz 2 - wersja po najechaniu">
+      </a>
+    </div>
 
-    <!-- 3) Obrazek: zmienia się na inny przy hover i jest linkiem -->
-    <a class="img-wrap" href="subpage3.html" aria-label="Przejdź do podstrony 3">
-      <img class="normal" src="images/menu/p_przyrodnicze_image.png" alt="Obraz 3 - normalny">
-      <img class="hover" src="images/menu/przyrodnicze_hover.png" alt="Obraz 3 - wersja po najechaniu">
-    </a>
+    <!-- 3) Obrazek: jak wyżej, link aktywny po hover/focus -->
+    <div class="item" tabindex="0" aria-label="Element 3 - najedź, aby aktywować link">
+      <a class="img-wrap" href="subpage3.html" aria-label="Przejdź do podstrony 3">
+        <img class="normal" src="images/menu/p_przyrodnicze_image.png" alt="Obraz 3 - normalny">
+        <img class="hover" src="images/menu/przyrodnicze_hover.png" alt="Obraz 3 - wersja po najechaniu">
+      </a>
+    </div>
 
-     <!-- 4) Obrazek: zmienia się na inny przy hover i jest linkiem -->
-    <a class="img-wrap" href="subpage4.html" aria-label="Przejdź do podstrony 4">
-      <img class="normal" src="images/menu/Kontakt_image.png" alt="Obraz 4 - normalny">
-      <img class="hover" src="images/menu/kontakt_hover.png" alt="Obraz 4 - wersja po najechaniu">
-    </a>
+    <!-- 4) Obrazek: jak 2/3, link do subpage4 aktywuje się po hover/focus -->
+    <div class="item" tabindex="0" aria-label="Element 4 - najedź, aby aktywować link">
+      <a class="img-wrap" href="subpage4.html" aria-label="Przejdź do podstrony 4">
+        <img class="normal" src="images/menu/Kontakt_image.png" alt="Obraz 4 - normalny">
+        <img class="hover" src="images/menu/kontakt_hover.png" alt="Obraz 4 - wersja po najechaniu">
+      </a>
+    </div>
 
-    <!-- 5) Obrazek: zmienia się na inny przy hover i po kliknięciu kopiuje email -->
-    <button class="img-wrap copy-btn" type="button" data-email="kontakt@example.com" aria-label="Kliknij, aby skopiować adres email">
-      <img class="normal" src="images/image4.jpg" alt="Obraz 5 - normalny">
-      <img class="hover" src="images/image4-hover.jpg" alt="Obraz 5 - wersja po najechaniu">
-      <span class="copied-msg" aria-hidden="true">Skopiowano</span>
-    </button>
+    <!-- 5) Obrazek: animowany GIF; kliknięcie kopiuje email -->
+    <div class="item" tabindex="0" aria-label="Element 5 - kliknij aby skopiować email">
+      <button class="img-wrap copy-btn" type="button" data-email="kontakt@example.com" aria-label="Kliknij, aby skopiować adres email">
+        <img class="normal" src="images/anim.gif" alt="Obraz 5 - animowany GIF">
+        <!-- jeśli chcesz wersję hover dla GIF, możesz dodać <img class="hover" src="..."> tutaj -->
+        <span class="copied-msg" aria-hidden="true">Skopiowano</span>
+      </button>
+    </div>
 
-    <!-- 6) Ostatni: animowany GIF (normalny), przy najechaniu zmienia się na statyczny obraz, link do strony głównej -->
-    <a class="img-wrap" href="/" aria-label="Strona główna">
-      <img class="normal" src="images/anim.gif" alt="Ostatni obraz - animowany GIF">
-      <img class="hover" src="images/anim-static.jpg" alt="Ostatni obraz - statyczna wersja po najechaniu">
-    </a>
-
-    <p>To jest końcowy napis.</p>
+    <!-- 6) Statyczny napis (element 6) -->
+    <div class="static-text" role="status" aria-label="Końcowy napis">
+      To jest końcowy napis.
+    </div>
   </div>
 
   <script>
@@ -158,27 +194,23 @@
         const email = btn.dataset.email;
         if (!email) return;
 
-        // Spróbuj skopiować do schowka
         try {
           await navigator.clipboard.writeText(email);
-          // pokaż komunikat potwierdzający
           const msg = btn.querySelector('.copied-msg');
           if (msg) {
             msg.textContent = 'Skopiowano: ' + email;
             msg.classList.add('show');
-            // usuń po 2 sek.
             setTimeout(() => msg.classList.remove('show'), 2000);
           } else {
             alert('Skopiowano: ' + email);
           }
         } catch (err) {
-          // fallback: zaznacz tekst i poproś użytkownika
           console.error('Kopiowanie nie powiodło się', err);
-          alert('Nie udało się automatycznie skopiować adresu. Proszę skopiować ręcznie: ' + email);
+          alert('Nie udało się skopiować adresu. Proszę skopiować ręcznie: ' + email);
         }
       });
 
-      // Umożliwienie skopiowania także po naciśnięciu Enter/Space (dostępność)
+      // dostępność: Enter/Space
       btn.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -186,7 +218,18 @@
         }
       });
     });
+
+    // Przy focusie kontenera .item przenieś focus na link/btn wewnątrz (ułatwia klawiaturze)
+    document.querySelectorAll('.item').forEach(item => {
+      item.addEventListener('focus', () => {
+        const inner = item.querySelector('a.img-wrap, button.img-wrap');
+        if (inner) inner.focus({preventScroll: true});
+      });
+      item.addEventListener('blur', () => {
+        const inner = item.querySelector('a.img-wrap, button.img-wrap');
+        if (inner) inner.blur();
+      });
+    });
   </script>
 </body>
 </html>
-```

@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="pl">
 <head>
@@ -11,106 +12,175 @@
       font-family: system-ui, Arial, sans-serif;
     }
 
-    /* .wrap pionowo i poziomo wyśrodkowane; większy odstęp między elementami */
     .wrap {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;    /* wyśrodkowanie poziome */
-      justify-content: center;/* WYŚRODKOWANIE PIONOWE */
-      padding: 40px 20px;     /* bezpieczne odstępy przy małych ekranach */
-      gap: 28px;              /* większe odstępy między elementami */
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 28px;
       box-sizing: border-box;
+      text-align: center;
     }
 
-    /* Link-wrappers dla obrazków */
+    /* Link-wrappers / button wrappers dla obrazków */
     a.img-wrap,
-    a.single-link {
+    button.img-wrap {
       display: block;
-      width: 320px;        /* dopasuj szerokość */
+      width: 320px;
       max-width: 90%;
       text-decoration: none;
       color: inherit;
       position: relative;  /* potrzebne dla absolutnego hover obrazka */
       overflow: hidden;
-      border-radius: 4px;
+      border-radius: 6px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
     }
 
-    /* Pojedyncze img (pierwszy) */
-    .single-link img,
-    .img-wrap img,
-    .single-img {
+    /* Podstawowy obraz (normal) - bierze udział w układzie i będzie zanikać */
+    .img-wrap img.normal {
       display: block;
       width: 100%;
       height: auto;
       object-fit: cover;
+      transition: opacity .25s ease-in-out;
+      opacity: 1;
+      z-index: 1;
     }
 
-    /* Nakładany obraz (wersja "hover") - domyślnie niewidoczny */
-    a.img-wrap img.hover {
+    /* Obraz hover — absolutny, nakłada się na podstawowy obraz */
+    .img-wrap img.hover {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      transition: opacity .18s ease-in-out;
-      pointer-events: none; /* hover idzie do linka */
+      transition: opacity .25s ease-in-out;
+      pointer-events: none;
+      z-index: 2;
     }
 
-    /* Pokazujemy wersję hover przy najechaniu lub przy fokusie (klawiatura) */
-    a.img-wrap:hover img.hover,
-    a.img-wrap:focus img.hover,
-    a.img-wrap:focus-within img.hover {
+    /* Przy hover lub focus wymieniamy obrazki: hover pojawia się, normal zanika */
+    .img-wrap:hover img.hover,
+    .img-wrap:focus img.hover,
+    .img-wrap:focus-within img.hover {
       opacity: 1;
+    }
+
+    .img-wrap:hover img.normal,
+    .img-wrap:focus img.normal,
+    .img-wrap:focus-within img.normal {
+      opacity: 0;
     }
 
     /* Widoczny fokus dla dostępności */
     a.img-wrap:focus,
-    a.single-link:focus {
+    button.img-wrap:focus {
       box-shadow: 0 0 0 4px rgba(21,156,228,0.25);
       outline: none;
-      border-radius: 6px;
     }
 
     p {
       margin: 0;
       text-align: center;
     }
+
+    /* wiadomość potwierdzająca skopiowanie (wewnątrz przycisku) */
+    .copied-msg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease-in-out;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .copied-msg.show { opacity: 1; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <!-- 1) Pierwszy obrazek: statyczny, link do strony głównej -->
-    <a class="single-link" href="/" aria-label="Strona główna">
-      <img class="single-img" src="images/logo.png" alt="Obraz 1 - statyczny">
+    <a class="single-link img-wrap" href="/" aria-label="Strona główna">
+      <img class="normal single-img" src="images/image1.jpg" alt="Obraz 1 - statyczny">
     </a>
 
-    <!-- 2) Obrazek: zmienia się na inny przy hover, link do podstrony -->
+    <!-- 2) Obrazek: zmienia się na inny przy hover i jest linkiem -->
     <a class="img-wrap" href="subpage2.html" aria-label="Przejdź do podstrony 2">
-      <img class="normal" src="images/menu/o_mnie_image.png" alt="Obraz 2 - normalny">
-      <img class="hover" src="images/menu/O_mnie_hover.png" alt="Obraz 2 - wersja po najechaniu">
+      <img class="normal" src="images/image2.jpg" alt="Obraz 2 - normalny">
+      <img class="hover" src="images/image2-hover.jpg" alt="Obraz 2 - wersja po najechaniu">
     </a>
 
-    <!-- 3) Obrazek: zmienia się na inny przy hover, link do podstrony -->
+    <!-- 3) Obrazek: zmienia się na inny przy hover i jest linkiem -->
     <a class="img-wrap" href="subpage3.html" aria-label="Przejdź do podstrony 3">
-      <img class="normal" src="image3.jpg" alt="Obraz 3 - normalny">
-      <img class="hover" src="image3-hover.jpg" alt="Obraz 3 - wersja po najechaniu">
+      <img class="normal" src="images/image3.jpg" alt="Obraz 3 - normalny">
+      <img class="hover" src="images/image3-hover.jpg" alt="Obraz 3 - wersja po najechaniu">
     </a>
 
-    <!-- 4) Obrazek: zmienia się na inny przy hover, link do podstrony -->
-    <a class="img-wrap" href="subpage4.html" aria-label="Przejdź do podstrony 4">
-      <img class="normal" src="image4.jpg" alt="Obraz 4 - normalny">
-      <img class="hover" src="image4-hover.jpg" alt="Obraz 4 - wersja po najechaniu">
-    </a>
+    <!-- 4) Obrazek: zmienia się na inny przy hover i po kliknięciu kopiuje email -->
+    <button class="img-wrap copy-btn" type="button" data-email="kontakt@example.com" aria-label="Kliknij, aby skopiować adres email">
+      <img class="normal" src="images/image4.jpg" alt="Obraz 4 - normalny">
+      <img class="hover" src="images/image4-hover.jpg" alt="Obraz 4 - wersja po najechaniu">
+      <span class="copied-msg" aria-hidden="true">Skopiowano</span>
+    </button>
 
     <!-- 5) Ostatni: animowany GIF (normalny), przy najechaniu zmienia się na statyczny obraz, link do strony głównej -->
     <a class="img-wrap" href="/" aria-label="Strona główna">
-      <img class="normal" src="anim.gif" alt="Ostatni obraz - animowany GIF">
-      <img class="hover" src="anim-static.jpg" alt="Ostatni obraz - statyczna wersja po najechaniu">
+      <img class="normal" src="images/anim.gif" alt="Ostatni obraz - animowany GIF">
+      <img class="hover" src="images/anim-static.jpg" alt="Ostatni obraz - statyczna wersja po najechaniu">
     </a>
 
     <p>To jest końcowy napis.</p>
   </div>
+
+  <script>
+    // Kopiowanie adresu email po kliknięciu przycisku .copy-btn
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const email = btn.dataset.email;
+        if (!email) return;
+
+        // Spróbuj skopiować do schowka
+        try {
+          await navigator.clipboard.writeText(email);
+          // pokaż komunikat potwierdzający
+          const msg = btn.querySelector('.copied-msg');
+          if (msg) {
+            msg.textContent = 'Skopiowano: ' + email;
+            msg.classList.add('show');
+            // usuń po 2 sek.
+            setTimeout(() => msg.classList.remove('show'), 2000);
+          } else {
+            alert('Skopiowano: ' + email);
+          }
+        } catch (err) {
+          // fallback: zaznacz tekst i poproś użytkownika
+          console.error('Kopiowanie nie powiodło się', err);
+          alert('Nie udało się automatycznie skopiować adresu. Proszę skopiować ręcznie: ' + email);
+        }
+      });
+
+      // Umożliwienie skopiowania także po naciśnięciu Enter/Space (dostępność)
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
+```

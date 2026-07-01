@@ -1,6 +1,7 @@
 /* GŁÓWNY PLIK STYLU DLA STRONY */
 :root {
   --img-base-width: 320px;
+  --single-scale: 0.3; /* 70% mniejszy -> 30% oryginalnej szerokości */
 }
 
 body {
@@ -143,9 +144,9 @@ button.img-wrap:focus {
 }
 
 /* pomocnicze klasy (użyj w HTML) */
-/* pierwszy obrazek 6x mniejszy */
+/* pierwszy obrazek 70% mniejszy (30% szerokości oryginalnej) */
 .single-link.tiny {
-  width: calc(var(--img-base-width) / 6);
+  width: calc(var(--img-base-width) * var(--single-scale));
 }
 
 /* trzeci obrazek powiększony o 25% */
@@ -162,6 +163,6 @@ p {
 /* responsywność: mniejsze bazowe rozmiary na VERY small ekranach */
 @media (max-width: 480px) {
   :root { --img-base-width: 260px; }
-  .single-link.tiny { width: calc(var(--img-base-width) / 6); }
+  .single-link.tiny { width: calc(var(--img-base-width) * var(--single-scale)); }
   .item.scale-125 { width: calc(var(--img-base-width) * 1.25); }
 }

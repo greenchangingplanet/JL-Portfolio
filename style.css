@@ -149,6 +149,22 @@ button.img-wrap:focus {
   width: calc(var(--img-base-width) * var(--single-scale));
 }
 
+/* gwarantowane nadpisanie szerokości dla pierwszego obrazka (tiny) */
+a.single-link.img-wrap.tiny,
+.single-link.img-wrap.tiny {
+  width: calc(var(--img-base-width) * var(--single-scale));
+  max-width: 90%;
+  display: block;
+}
+
+/* upewnij się, że obraz w środku dopasowuje się do kotwicy */
+a.single-link.img-wrap.tiny img,
+.single-link.tiny img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 /* 3) powiększenie o 50% (dla elementu 3) */
 .item.scale-150 {
   width: calc(var(--img-base-width) * 1.5);
